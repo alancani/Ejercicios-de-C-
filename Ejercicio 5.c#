@@ -1,0 +1,27 @@
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        string continuar = "S";
+
+        while (continuar.ToUpper() == "S")
+        {
+            Console.Write("Número de turno: ");
+            int turno = int.Parse(Console.ReadLine());
+
+            if (turno <= 0)
+            {
+                Console.WriteLine("Error: el turno debe ser mayor a 0");
+            }
+            else
+            {
+                Console.WriteLine("Turno registrado: " + turno);
+            }
+
+            Console.Write("¿Desea continuar? (S/N): ");
+            continuar = Console.ReadLine();
+        }
+    }
+}
