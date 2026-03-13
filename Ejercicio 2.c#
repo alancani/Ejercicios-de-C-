@@ -1,0 +1,26 @@
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        Console.Write("Temperatura: ");
+        double temp = double.Parse(Console.ReadLine());
+
+        Console.Write("Presión Sistólica: ");
+        int presion = int.Parse(Console.ReadLine());
+
+        if (temp > 39 || presion > 180)
+        {
+            Console.WriteLine(" ROJO - CRÍTICO");
+        }
+        else if (temp > 38 || presion > 140)
+        {
+            Console.WriteLine(" AMARILLO - URGENTE");
+        }
+        else
+        {
+            Console.WriteLine(" VERDE - ESTABLE");
+        }
+    }
+}
