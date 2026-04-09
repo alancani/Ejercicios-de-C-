@@ -1,0 +1,31 @@
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        bool esValido = false;
+
+        while (!esValido)
+        {
+            try
+            {
+                Console.Write("Ingrese el número de historia clínica: ");
+                string entrada = Console.ReadLine();
+                
+                
+                int hc = int.Parse(entrada);
+
+                Console.WriteLine($"\nRegistro exitoso. Historia N°: {hc}");
+                esValido = true; 
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Error: El dato ingresado no es numérico. Intente de nuevo.");
+            }
+        }
+
+        Console.WriteLine("Presione cualquier tecla para terminar...");
+        Console.ReadKey();
+    }
+} 	
