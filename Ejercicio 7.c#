@@ -1,0 +1,37 @@
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        Console.WriteLine("--- SISTEMA DE DOSIFICACIÓN ---");
+        
+        Console.Write("Nombre del paciente: ");
+        string paciente = Console.ReadLine();
+        
+        Console.Write("Peso (kg): ");
+        double pesoPac = double.Parse(Console.ReadLine());
+        
+        Console.Write("Dosis por kilo (mg): ");
+        double dosisKilo = double.Parse(Console.ReadLine());
+
+        double dosisTotal = CalcularDosis(pesoPac, dosisKilo);
+
+        MostrarResultado(paciente, dosisTotal);
+        
+        Console.ReadKey();
+    }
+
+    static double CalcularDosis(double peso, double dosisPorKg)
+    {
+        return peso * dosisPorKg;
+    }
+
+    static void MostrarResultado(string nombre, double dosis)
+    {
+        Console.WriteLine("\n==============================");
+        Console.WriteLine($"RESULTADO: {nombre}");
+        Console.WriteLine($"Dosis calculada: {dosis} mg");
+        Console.WriteLine("==============================");
+    }
+}
