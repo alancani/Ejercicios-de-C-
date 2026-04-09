@@ -1,0 +1,80 @@
+using System;
+using System.IO;
+
+class Usuario
+{
+    public string User { get; set; } = "admin";
+    public string Pass { get; set; } = "1234";
+}
+
+class Cita
+{
+    public string Paciente { get; set; }
+    public string Hora { get; set; }
+
+    public string FormatoArchivo() => $"Paciente: {Paciente} | Hora: {Hora}";
+}
+
+class Program
+{
+    static void Main()
+    {
+        Usuario credenciales = new Usuario();
+
+        Console.WriteLine("--- LOGIN ---");
+        Console.Write("Usuario: ");
+        string u = Console.ReadLine();
+        Console.Write("Clave: ");
+        string p = Console.ReadLine();
+
+        if (u == credenciales.User && p == credenciales.Pass)
+        {
+            Menu();
+        }
+        else
+        {
+            Console.WriteLine("Acceso incorrecto.");
+        }
+    }
+
+    static void Menu()
+    {
+        int op = 0;
+        do
+        {
+            try
+            {
+                Console.WriteLine("\n1. Registrar Cita\n2. Ver Citas\n3. Salir");
+                Console.Write("Opción: ");
+                op = int.Parse(Console.ReadLine());
+
+                if (op == 1) Registrar();
+                else if (op == 2) Ver();
+            }
+            catch { Console.WriteLine("Entrada inválida."); }
+
+        } while (op != 3);
+    }
+
+    static void Registrar()
+    {
+        Cita c = new Cita();
+        Console.Write("Paciente: ");
+        c.Paciente = Console.ReadLine();
+        Console.Write("Hora: ");
+        c.Hora = Console.ReadLine();
+
+        File.AppendAllText("citas.txt", c.FormatoArchivo() + Environment.NewLine);
+        Console.WriteLine("Guardado en citas.txt");
+    }
+
+    static void Ver()
+    {
+        if (File.Exists("citas.txt"))
+        {
+            Console.WriteLine("\n--- LISTADO ---");
+            Console.WriteLine(File.ReadAllText("citas.txt"));
+        }
+        else Console.WriteLine("No hay registros.");
+    }
+}
