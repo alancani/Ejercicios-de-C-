@@ -1,0 +1,182 @@
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    struct Producto
+    {
+        public string Nombre { get; set; }
+        public double Precio { get; set; }
+
+        public Producto(string nombre, double precio)
+        {
+            Nombre = nombre;
+            Precio = precio;
+        }
+    }
+
+    static void Main(string[] args)
+    {
+        Dictionary<string, Producto> inventario = new Dictionary<string, Producto>();
+        bool salir = false;
+
+        while (!salir)
+        {
+            Console.Clear();
+            Console.WriteLine("--- SISTEMA DE INVENTARIO DE SUPERMERCADO ---");
+            Console.WriteLine("1. Agregar producto");
+            Console.WriteLine("2. Eliminar producto");
+            Console.WriteLine("3. Mostrar inventario");
+            Console.WriteLine("4. Crear Factura"); 
+            Console.WriteLine("5. Salir"); 
+            Console.Write("Seleccione una opcion: ");
+            
+            string opcion = Console.ReadLine();
+
+            switch (opcion)
+            {
+                case "1":
+                    AgregarProducto(inventario);
+                    break;
+                case "2":
+                    EliminarProducto(inventario);
+                    break;
+                case "3":
+                    MostrarInventario(inventario);
+                    break;
+                case "4":
+                    CrearFactura(inventario); 
+                    break;
+                case "5":
+                    salir = true;
+                    Console.WriteLine("\n¡Gracias por usar el sistema!");
+                    break;
+                default:
+                    Console.WriteLine("\nOpcion invalida. Presione Enter para intentar de nuevo.");
+                    Console.ReadLine();
+                    break;
+            }
+        }
+    }
+
+    static void AgregarProducto(Dictionary<string, Producto> inventario)
+    {
+        Console.Clear();
+        Console.WriteLine("--- Agregar Producto ---");
+        Console.Write("Ingrese el nombre del producto: ");
+        string nombre = Console.ReadLine().Trim();
+
+        if (string.IsNullOrEmpty(nombre))
+        {
+            Console.WriteLine("El nombre no puede estar vacío. Presione Enter.");
+            Console.ReadLine();
+            return;
+        }
+
+        Console.Write("Ingrese el precio del producto: $");
+        if (double.TryParse(Console.ReadLine(), out double precio) && precio >= 0)
+        {
+            Producto nuevoProducto = new Producto(nombre, precio);
+            inventario[nombre.ToLower()] = nuevoProducto; 
+            
+            Console.WriteLine($"\n¡{nombre} guardado exitosamente con un precio de ${precio}!");
+        }
+        else
+        {
+            Console.WriteLine("\nPrecio invalido. ");
+        }
+        Console.WriteLine("Presione Enter para continuar...");
+        Console.ReadLine();
+    }
+
+    static void EliminarProducto(Dictionary<string, Producto> inventario)
+    {
+        Console.Clear();
+        Console.WriteLine("--- ELIMINAR PRODUCTO ---");
+        Console.Write("Ingrese el nombre del producto a eliminar: ");
+        string nombre = Console.ReadLine().Trim().ToLower();
+
+        if (inventario.Remove(nombre))
+        {
+            Console.WriteLine("\nProducto eliminado correctamente del inventario.");
+        }
+        else
+        {
+            Console.WriteLine("\nEl producto no fue encontrado en el sistema.");
+        }
+        Console.WriteLine("Presione Enter para continuar...");
+        Console.ReadLine();
+    }
+
+    static void MostrarInventario(Dictionary<string, Producto> inventario)
+    {
+        Console.Clear();
+        Console.WriteLine("--- INVENTARIO ACTUAL ---");
+
+        if (inventario.Count == 0)
+        {
+            Console.WriteLine("El inventario está vacío.");
+        }
+        else
+        {
+            double totalDinero = 0;
+            Console.WriteLine(string.Format("{0,-20} {1,10}", "Producto", "Precio"));
+
+            foreach (var item in inventario.Values)
+            {
+                Console.WriteLine(string.Format("{0,-20} ${1,9:N2}", item.Nombre, item.Precio));
+                totalDinero += item.Precio;
+            }
+
+            Console.WriteLine("----------------------------------");
+            Console.WriteLine($"Valor total del inventario: ${totalDinero:N2}");
+        }
+
+        Console.WriteLine("\nPresione Enter para regresar al menú...");
+        Console.ReadLine();
+    }
+
+   
+    static void CrearFactura(Dictionary<string, Producto> inventario)
+    {
+        Console.Clear();
+        Console.WriteLine("--- CREAR FACTURA ---");
+        
+        double subtotal = 0;
+        bool agregando = true;
+
+        while (agregando)
+        {
+            Console.Write("Ingrese el nombre del producto para vender (o escriba 'fin'para cerrar la compra.): ");
+            string nombreBuscar = Console.ReadLine().Trim().ToLower();
+
+            if (nombreBuscar == "fin")
+            {
+                agregando = false;
+            }
+            else if (inventario.ContainsKey(nombreBuscar))
+            {
+                
+                subtotal += inventario[nombreBuscar].Precio;
+                Console.WriteLine($"-> Agregado: {inventario[nombreBuscar].Nombre} ($" + inventario[nombreBuscar].Precio + ")");
+            }
+            else
+            {
+                Console.WriteLine("El producto no existe en el inventario.");
+            }
+            Console.WriteLine();
+        }
+
+        
+        double iva = subtotal * 0.19;
+        double total = subtotal + iva;
+
+        Console.WriteLine("--- TOTALES DE LA FACTURA ---");
+        Console.WriteLine("Subtotal: $" + subtotal);
+        Console.WriteLine("IVA (19%): $" + iva);
+        Console.WriteLine("Total a Pagar: $" + total);
+
+        Console.WriteLine("\nPresione Enter para continuar...");
+        Console.ReadLine();
+    }
+}
